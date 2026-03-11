@@ -3,7 +3,7 @@
 import Icons from "@/components/global/icons";
 import { Button } from "@/components/ui/button";
 import type { FormDefinition } from "@/types/form";
-import { Loader2Icon, MoreVerticalIcon, CheckIcon, CopyIcon, ListIcon, ExternalLinkIcon, TrashIcon } from "lucide-react";
+import { Loader2Icon, MoreVerticalIcon, CheckIcon, CopyIcon, ListIcon, ExternalLinkIcon, TrashIcon, InfoIcon } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -27,15 +27,13 @@ const FormsPage = () => {
         fetch(`${API_BASE}/forms/definitions`)
             .then((r) => r.json())
             .then((data) => setForms(Array.isArray(data) ? data : []))
-            .catch(() => toast.error("Could not load forms"))
-            .finally(() => setLoading(false));
+            .catch(() => toast.error("Could not load forms"));
     }, []);
 
     const handleCopy = (formId: string) => {
         const link = `${window.location.origin}/forms/${formId}`;
         navigator.clipboard.writeText(link);
-        setCopiedId(formId);
-        setTimeout(() => setCopiedId(null), 2000);
+        toast.success("Link copied to clipboard!");
     };
 
     const handleDelete = async (formId: string) => {
@@ -66,7 +64,15 @@ const FormsPage = () => {
 
     return (
         <main className="min-h-screen bg-background">
-            <div className="max-w-3xl mx-auto px-4 py-10 flex flex-col gap-8">
+            <div className="max-w-3xl mx-auto px-4 py-8 flex flex-col gap-6">
+                
+                <div className="flex items-center gap-3 bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:bg-blue-500/5 dark:text-blue-400 p-3 rounded-lg text-sm">
+                    <InfoIcon className="size-4 shrink-0" />
+                    <p>
+                        <strong>Note:</strong> Since the backend is hosted on a free tier, initial requests may take 50-60 seconds to boot up.
+                    </p>
+                </div>
+
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <Icons.logo className="size-8" />
@@ -86,11 +92,7 @@ const FormsPage = () => {
                     </Link>
                 </div>
 
-                {loading ? (
-                    <div className="flex items-center justify-center py-24">
-                        <Loader2Icon className="size-6 animate-spin text-muted-foreground" />
-                    </div>
-                ) : forms.length === 0 ? (
+                {forms.length === 0 ? (
                     <div className="flex flex-col items-center gap-3 py-24 text-center">
                         <Icons.form className="size-8 text-muted-foreground/40" />
                         <p className="text-sm font-medium text-muted-foreground">
