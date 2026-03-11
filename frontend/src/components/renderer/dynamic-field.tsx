@@ -40,7 +40,7 @@ const validate = (field: FormField, value: string): string => {
 };
 
 const FieldLabel = ({ field, highlight }: { field: FormField; highlight?: boolean }) => (
-    <Label htmlFor={field.id} className="wrap-break-word whitespace-normal leading-tight w-full max-w-full block">
+    <Label htmlFor={field.id} className="wrap-break-word whitespace-normal leading-tight w-full max-w-full flex">
         {field.label}
         {field.required && (
             <span className="text-primary ml-1">
@@ -48,7 +48,7 @@ const FieldLabel = ({ field, highlight }: { field: FormField; highlight?: boolea
             </span>
         )}
         {highlight && (
-            <span className="ml-2 rounded-sm bg-orange-100 px-1.5 py-0.5 text-xs font-medium text-orange-600 flex items-center gap-0.5">
+            <span className="ml-2 rounded-sm bg-orange-100 px-1.5 py-0.5 text-xs font-medium text-orange-600 flex items-center gap-0.5 w-max">
                 <TriangleAlertIcon className="size-3" /> Safety Condition
             </span>
         )}

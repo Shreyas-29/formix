@@ -137,7 +137,7 @@ const SubmissionsPage = () => {
                                         {fields.map((f) => (
                                             <th
                                                 key={f.id}
-                                                className="px-4 py-3 text-left text-xs font-medium text-muted-foreground whitespace-normal leading-normal max-w-[200px]"
+                                                className="px-4 py-3 text-left text-xs font-medium text-muted-foreground whitespace-nowrap"
                                             >
                                                 {f.label}
                                             </th>
@@ -157,7 +157,7 @@ const SubmissionsPage = () => {
                                                 {formatDate(sub.created_at)}
                                             </td>
                                             {fields.map((f) => (
-                                                <td key={f.id} className="px-4 py-3 text-sm max-w-sm align-top wrap-break-word whitespace-normal leading-relaxed">
+                                                <td key={f.id} className="px-4 py-3 text-sm md:min-w-[200px] max-w-[400px] align-middle wrap-break-word whitespace-normal leading-relaxed">
                                                     {sub.data[f.id] && sub.data[f.id].startsWith("http") ? (
                                                         <a
                                                             href={sub.data[f.id]}
