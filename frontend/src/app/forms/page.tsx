@@ -142,7 +142,10 @@ const FormsPage = () => {
                                                 <MoreVerticalIcon className="size-4" />
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end" className="w-44">
-                                                <DropdownMenuItem onClick={() => handleCopy(form.id)} className="gap-2 cursor-pointer">
+                                                <DropdownMenuItem onClick={() => {
+                                                    handleCopy(form.id);
+                                                    toast.success("Link copied to clipboard");
+                                                }} className="gap-2 cursor-pointer">
                                                     {copiedId === form.id ? "Copied!" : "Copy link"}
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem className="gap-2 cursor-pointer p-0">

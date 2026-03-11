@@ -107,7 +107,7 @@ const DynamicField = ({ field, value, onChange, branches, highlight }: Props) =>
                         maxLength={field.maxLength}
                         placeholder={field.placeholder ?? `Enter ${field.label.toLowerCase()}`}
                         onChange={(e) => handleChange(e.target.value)}
-                        className="min-h-24"
+                        className="min-h-24 max-h-40"
                     />
                     <div className="flex items-center justify-between">
                         <FieldError msg={error} />

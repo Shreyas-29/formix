@@ -4,6 +4,14 @@ Formix is an easy-to-use platform for teams to quickly make custom forms, set up
 
 <img width="1280" alt="Formix Dashboard" src="https://github.com/user-attachments/assets/4123ad93-0573-4c09-934c-5a3702109c81" />
 
+## 🎥 Demo Video
+
+Here is a quick walkthrough of how Formix works, creating a custom form with logic and submitting it:
+
+<!-- Just drag and drop your screen recording file here in the GitHub editor to upload it directly -->
+<video controls src="" width="100%"></video>
+
+
 ## ✨ Core Features
 
 - **Form Builder**: A simple drag-and-drop tool to make custom forms.
@@ -27,6 +35,14 @@ Formix is an easy-to-use platform for teams to quickly make custom forms, set up
 - **Framework**: FastAPI (Python)
 - **Database**: PostgreSQL (Supabase)
 - **Tools**: Pydantic
+
+## 🏗️ Architecture & Database
+
+Formix handles scalable and customizable forms using a dynamic JSON-driven approach:
+
+- **Dynamic Form Schema**: Forms are built and stored using a flexible `JSONB` format in PostgreSQL.
+- **Dynamic Renderer**: The frontend includes a dynamic rendering engine that parses the `JSONB` schema. It automatically generates the correct React components, handles state, enforces validation rules, and manages conditional logic on the fly.
+- **Flexible Submissions**: Eeach submission record is stored dynamically, mapping each unique `field_id` to the user's answered value.
 
 ## 🚀 Getting Started
 
