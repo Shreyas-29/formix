@@ -26,6 +26,7 @@ type Props = {
     formId: string | null;
     isPreview: boolean;
     onTogglePreview: () => void;
+    isEditing?: boolean;
 };
 
 const AdminTopBar = ({
@@ -38,6 +39,7 @@ const AdminTopBar = ({
     formId,
     isPreview,
     onTogglePreview,
+    isEditing = false,
 }: Props) => {
 
     const [copied, setCopied] = useState<boolean>(false);
@@ -103,9 +105,12 @@ const AdminTopBar = ({
                             size="sm"
                             onClick={onSave}
                             disabled={!canSave || isSaving}
+                            className="w-20"
                         >
                             {isSaving ? (
                                 <Loader2Icon className="size-4 animate-spin" />
+                            ) : isEditing ? (
+                                "Update"
                             ) : (
                                 "Publish"
                             )}
@@ -120,7 +125,7 @@ const AdminTopBar = ({
                                 <div className="absolute right-0 top-full mt-2 z-50 w-80 rounded-lg border border-border/50 bg-card shadow-xl shadow-neutral-400/30 overflow-hidden">
                                     <div className="flex items-center justify-between px-4 pt-4 pb-2">
                                         <span className="text-sm font-medium">
-                                            Published
+                                            {isEditing ? "Updated" : "Published"}
                                         </span>
                                         <Button
                                             size="icon-sm"
@@ -135,7 +140,9 @@ const AdminTopBar = ({
 
                                     <div className="px-4 pb-2">
                                         <p className="text-xs text-muted-foreground">
-                                            Share this link with your team to collect responses.
+                                            {isEditing
+                                                ? "Your changes have been saved."
+                                                : "Share this link with your team to collect responses."}
                                         </p>
                                     </div>
 

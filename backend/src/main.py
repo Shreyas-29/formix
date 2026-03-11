@@ -71,23 +71,24 @@ class FieldSchema(BaseModel):
             raise ValueError(f"Unknown field type: {v}")
         return v
 
-
 class FormSchema(BaseModel):
     title: str
     description: Optional[str] = None
     fields: list[FieldSchema]
-
 
 class CreateFormPayload(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
     title: str
     form_schema: FormSchema = Field(alias="schema")
 
+class UpdateFormPayload(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+    title: str
+    form_schema: FormSchema = Field(alias="schema")
 
 class SubmissionPayload(BaseModel):
     branch_id: Optional[str] = None
     data: dict[str, Any]
-
 
 # ─── Validation helpers ───────────────────────────────────────────────────────
 
@@ -97,12 +98,12 @@ PHONE_RE = re.compile(r"^\+?[\d\s\-().]{7,15}$")
 def evaluate_rule(rule: LogicRule, form_data: dict[str, Any]) -> bool:
     source_val = form_data.get(rule.fieldId)
     raw_source = str(source_val).strip() if source_val is not None else ""
-    
+
     if rule.operator == "==":
         return raw_source == rule.value
     elif rule.operator == "!=":
         return raw_source != rule.value
-    
+
     try:
         num_source = float(raw_source) if raw_source else 0.0
         num_val = float(rule.value) if rule.value else 0.0
@@ -116,21 +117,23 @@ def evaluate_rule(rule: LogicRule, form_data: dict[str, Any]) -> bool:
             return num_source < num_val
     except ValueError:
         pass
-    
+
     return False
 
 def is_field_visible(field: FieldSchema, form_data: dict[str, Any]) -> bool:
     if not field.rules:
         return True
-    
-    hide_rule = next((r for r in field.rules if r.effect == "hide" and r.targetFieldId == field.id), None)
-    show_rule = next((r for r in field.rules if r.effect == "show" and r.targetFieldId == field.id), None)
-    
+
+    hide_rule = next((r for r in field.rules if r.effect ==
+                     "hide" and r.targetFieldId == field.id), None)
+    show_rule = next((r for r in field.rules if r.effect ==
+                     "show" and r.targetFieldId == field.id), None)
+
     if hide_rule and evaluate_rule(hide_rule, form_data):
         return False
     if show_rule:
         return evaluate_rule(show_rule, form_data)
-        
+
     return True
 
 def is_field_required(field: FieldSchema, form_data: dict[str, Any]) -> bool:
@@ -184,14 +187,12 @@ def validate_submission_data(schema: FormSchema, data: dict[str, Any]) -> None:
                 detail=f"'{field.label}' exceeds max length of {field.maxLength}",
             )
 
-
 # ─── Routes ───────────────────────────────────────────────────────────────────
 
 @app.get("/metadata/branches")
 def list_branches():
     result = supabase.table("branches").select("id, name, location").execute()
     return result.data
-
 
 @app.get("/forms/definitions")
 def list_form_definitions():
@@ -202,7 +203,6 @@ def list_form_definitions():
         .execute()
     )
     return result.data
-
 
 @app.post("/forms/definitions", status_code=201)
 def create_form_definition(payload: CreateFormPayload):
@@ -217,6 +217,31 @@ def create_form_definition(payload: CreateFormPayload):
         raise HTTPException(status_code=500, detail="Failed to save form")
     return result.data[0]
 
+@app.put("/forms/{form_id}")
+def update_form_definition(form_id: str, payload: UpdateFormPayload):
+    check_result = (
+        supabase.table("forms")
+        .select("id")
+        .eq("id", form_id)
+        .single()
+        .execute()
+    )
+    if not check_result.data:
+        raise HTTPException(status_code=404, detail="Form not found")
+
+    update_data = {
+        "title": payload.title,
+        "schema": payload.form_schema.model_dump(),
+    }
+    result = (
+        supabase.table("forms")
+        .update(update_data)
+        .eq("id", form_id)
+        .execute()
+    )
+    if not result.data:
+        raise HTTPException(status_code=500, detail="Failed to update form")
+    return result.data[0]
 
 @app.get("/forms/{form_id}")
 def get_form(form_id: str):
@@ -230,7 +255,6 @@ def get_form(form_id: str):
     if not result.data:
         raise HTTPException(status_code=404, detail="Form not found")
     return result.data
-
 
 @app.post("/forms/{form_id}/submission", status_code=201)
 def submit_form(form_id: str, payload: SubmissionPayload):
@@ -267,9 +291,9 @@ def submit_form(form_id: str, payload: SubmissionPayload):
 
     result = supabase.table("submissions").insert(row).execute()
     if not result.data:
-        raise HTTPException(status_code=500, detail="Failed to save submission")
+        raise HTTPException(
+            status_code=500, detail="Failed to save submission")
     return {"id": result.data[0]["id"], "message": "Submission recorded"}
-
 
 @app.get("/forms/{form_id}/submissions")
 def list_submissions(form_id: str):
@@ -295,18 +319,14 @@ def list_submissions(form_id: str):
         "submissions": result.data,
     }
 
-
 @app.delete("/forms/{form_id}", status_code=204)
 def delete_form(form_id: str):
     supabase.table("submissions").delete().eq("form_id", form_id).execute()
-    
+
     result = supabase.table("forms").delete().eq("id", form_id).execute()
     if not result.data:
         raise HTTPException(status_code=404, detail="Form not found")
     return None
-
-
-
 
 if __name__ == "__main__":
     uvicorn.run("src.main:app", host="0.0.0.0", port=8000, reload=True)
