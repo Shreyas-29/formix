@@ -40,6 +40,14 @@ const shouldHighlight = (field: FormField, formState: FormState): boolean => {
     );
 };
 
+const isFieldRequired = (field: FormField, formState: FormState): boolean => {
+    if (field.required) return true;
+    if (!field.rules) return false;
+    return field.rules.some(
+        (r) => r.effect === "require" && evaluateRule(r, formState)
+    );
+};
+
 type DynamicFormProps = {
     fields: FormField[];
     formState: FormState;
@@ -68,7 +76,7 @@ const DynamicForm = ({ fields, formState, onChange }: DynamicFormProps) => {
                 return (
                     <DynamicField
                         key={field.id}
-                        field={field}
+                        field={{ ...field, required: isFieldRequired(field, formState) }}
                         value={formState[field.id] ?? ""}
                         onChange={onChange}
                         branches={branches}

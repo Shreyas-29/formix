@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import VideoUploadField from "@/components/renderer/video-upload-field";
 import ImageUploadField from "@/components/renderer/image-upload-field";
 import type { FormField, Branch } from "@/types/form";
+import { TriangleAlertIcon } from "lucide-react";
 
 type Props = {
     field: FormField;
@@ -39,7 +40,7 @@ const validate = (field: FormField, value: string): string => {
 };
 
 const FieldLabel = ({ field, highlight }: { field: FormField; highlight?: boolean }) => (
-    <Label htmlFor={field.id}>
+    <Label htmlFor={field.id} className="wrap-break-word whitespace-normal leading-tight w-full max-w-full block">
         {field.label}
         {field.required && (
             <span className="text-primary ml-1">
@@ -47,8 +48,8 @@ const FieldLabel = ({ field, highlight }: { field: FormField; highlight?: boolea
             </span>
         )}
         {highlight && (
-            <span className="ml-2 rounded-full bg-orange-100 px-1.5 py-0.5 text-xs font-medium text-orange-600">
-                ⚠ Safety Condition
+            <span className="ml-2 rounded-sm bg-orange-100 px-1.5 py-0.5 text-xs font-medium text-orange-600 flex items-center gap-0.5">
+                <TriangleAlertIcon className="size-3" /> Safety Condition
             </span>
         )}
     </Label>
@@ -63,7 +64,7 @@ const DynamicField = ({ field, value, onChange, branches, highlight }: Props) =>
 
     const wrapper = cn(
         "flex flex-col gap-1.5 rounded-xl p-2 transition-colors",
-        highlight ? "border border-orange-300 bg-orange-50" : "bg-transparent"
+        highlight ? "" : "bg-transparent"
     );
 
     const handleChange = (val: string) => {
@@ -181,13 +182,17 @@ const DynamicField = ({ field, value, onChange, branches, highlight }: Props) =>
             const options = field.dataSource === "branches"
                 ? branches.map((b) => ({ value: b.id, label: `${b.name} — ${b.location}` }))
                 : (field.options ?? []).map((o) => ({ value: o, label: o }));
+            
+            const selectedOption = options.find(opt => opt.value === value);
 
             return (
                 <div className={wrapper}>
                     <FieldLabel field={field} highlight={highlight} />
                     <Select value={value} onValueChange={(v) => v && onChange(field.id, v)}>
                         <SelectTrigger className="w-full">
-                            <SelectValue placeholder={`Select ${field.label.toLowerCase()}`} />
+                            <span data-slot="select-value" className="flex flex-1 text-left truncate">
+                                {selectedOption ? selectedOption.label : <SelectValue placeholder={`Select ${field.label.toLowerCase()}`} />}
+                            </span>
                         </SelectTrigger>
                         <SelectContent alignItemWithTrigger={false}>
                             {options.map((opt) => (
@@ -212,7 +217,7 @@ const DynamicField = ({ field, value, onChange, branches, highlight }: Props) =>
                                 type="button"
                                 onClick={() => onChange(field.id, opt)}
                                 className={cn(
-                                    "rounded-lg border px-4 py-2 text-sm transition-all",
+                                    "rounded-lg border px-4 py-1.5 text-sm transition-all cursor-pointer",
                                     value === opt
                                         ? "border-primary bg-primary text-primary-foreground"
                                         : "border-border bg-background hover:border-primary/50"

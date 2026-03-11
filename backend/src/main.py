@@ -41,6 +41,14 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 # ─── Models ──────────────────────────────────────────────────────────────────
 
+class LogicRule(BaseModel):
+    fieldId: str
+    operator: str
+    value: str
+    effect: str
+    targetFieldId: str
+
+
 class FieldSchema(BaseModel):
     id: str
     type: str
@@ -50,6 +58,7 @@ class FieldSchema(BaseModel):
     options: Optional[list[str]] = None
     dataSource: Optional[str] = None
     maxLength: Optional[int] = None
+    rules: Optional[list[LogicRule]] = None
 
     @field_validator("type")
     @classmethod
@@ -85,12 +94,61 @@ class SubmissionPayload(BaseModel):
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 PHONE_RE = re.compile(r"^\+?[\d\s\-().]{7,15}$")
 
+def evaluate_rule(rule: LogicRule, form_data: dict[str, Any]) -> bool:
+    source_val = form_data.get(rule.fieldId)
+    raw_source = str(source_val).strip() if source_val is not None else ""
+    
+    if rule.operator == "==":
+        return raw_source == rule.value
+    elif rule.operator == "!=":
+        return raw_source != rule.value
+    
+    try:
+        num_source = float(raw_source) if raw_source else 0.0
+        num_val = float(rule.value) if rule.value else 0.0
+        if rule.operator == ">=":
+            return num_source >= num_val
+        elif rule.operator == "<=":
+            return num_source <= num_val
+        elif rule.operator == ">":
+            return num_source > num_val
+        elif rule.operator == "<":
+            return num_source < num_val
+    except ValueError:
+        pass
+    
+    return False
+
+def is_field_visible(field: FieldSchema, form_data: dict[str, Any]) -> bool:
+    if not field.rules:
+        return True
+    
+    hide_rule = next((r for r in field.rules if r.effect == "hide" and r.targetFieldId == field.id), None)
+    show_rule = next((r for r in field.rules if r.effect == "show" and r.targetFieldId == field.id), None)
+    
+    if hide_rule and evaluate_rule(hide_rule, form_data):
+        return False
+    if show_rule:
+        return evaluate_rule(show_rule, form_data)
+        
+    return True
+
+def is_field_required(field: FieldSchema, form_data: dict[str, Any]) -> bool:
+    if field.required:
+        return True
+    if not field.rules:
+        return False
+    return any(r.effect == "require" and evaluate_rule(r, form_data) for r in field.rules)
+
 def validate_submission_data(schema: FormSchema, data: dict[str, Any]) -> None:
     for field in schema.fields:
+        if not is_field_visible(field, data):
+            continue
+
         value = data.get(field.id)
         raw = str(value).strip() if value is not None else ""
 
-        if field.required and not raw:
+        if is_field_required(field, data) and not raw:
             raise HTTPException(
                 status_code=422,
                 detail=f"'{field.label}' is required",
@@ -236,6 +294,18 @@ def list_submissions(form_id: str):
         "form": form_result.data,
         "submissions": result.data,
     }
+
+
+@app.delete("/forms/{form_id}", status_code=204)
+def delete_form(form_id: str):
+    supabase.table("submissions").delete().eq("form_id", form_id).execute()
+    
+    result = supabase.table("forms").delete().eq("id", form_id).execute()
+    if not result.data:
+        raise HTTPException(status_code=404, detail="Form not found")
+    return None
+
+
 
 
 if __name__ == "__main__":

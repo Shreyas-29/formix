@@ -31,6 +31,30 @@ const OptionsEditor = ({ options, onChange }: Props) => {
 
     return (
         <div className="flex flex-col gap-2">
+            {options.length < MAX_OPTIONS ? (
+                <button
+                    type="button"
+                    onClick={addOption}
+                    className="flex items-center gap-0.5 text-xs p-1.5 hover:bg-muted/30 rounded-md transition-colors cursor-pointer mt-1 border border-border/80"
+                >
+                    <PlusIcon className="size-3.5" />
+                    Add option
+                    <span className="ml-auto text-muted-foreground/60">
+                        {options.length}/{MAX_OPTIONS}
+                    </span>
+                </button>
+            ) : (
+                <p className="text-xs text-muted-foreground/60">
+                    Max {MAX_OPTIONS} options reached
+                </p>
+            )}
+
+            {options.length === 0 && (
+                <div className="text-xs text-muted-foreground p-2 border border-border border-dashed rounded-md text-center">
+                    No options defined
+                </div>
+            )}
+
             {options.map((opt, index) => (
                 <div key={index} className="flex items-center gap-2">
                     <span className="w-4 shrink-0 text-right text-xs text-muted-foreground">
@@ -53,24 +77,6 @@ const OptionsEditor = ({ options, onChange }: Props) => {
                     </Button>
                 </div>
             ))}
-
-            {options.length < MAX_OPTIONS ? (
-                <button
-                    type="button"
-                    onClick={addOption}
-                    className="flex items-center gap-0.5 text-xs text-primary hover:text-primary/80 p-1.5 hover:bg-primary/10 rounded-md transition-colors cursor-pointer mt-1"
-                >
-                    <PlusIcon className="size-3.5" />
-                    Add option
-                    <span className="ml-auto text-muted-foreground/60">
-                        {options.length}/{MAX_OPTIONS}
-                    </span>
-                </button>
-            ) : (
-                <p className="text-xs text-muted-foreground/60">
-                    Max {MAX_OPTIONS} options reached
-                </p>
-            )}
         </div>
     );
 };

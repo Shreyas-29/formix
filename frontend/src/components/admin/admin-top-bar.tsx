@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Icons from "@/components/global/icons";
+import Link from "next/link";
 import type { FormField } from "@/types/form";
 
 type Props = {
@@ -63,12 +64,12 @@ const AdminTopBar = ({
         <div className="flex flex-col shrink-0 z-10">
             <div className="flex h-14 items-center justify-between border-b border-border/40 bg-card px-4">
                 <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-1.5">
+                    <Link href="/forms" className="flex items-center gap-1.5 hover:opacity-80 transition-opacity">
                         <Icons.logo className="size-6" />
                         <span className="text-sm font-semibold tracking-tight">
                             Formix
                         </span>
-                    </div>
+                    </Link>
                     <div className="w-px h-5 bg-border" />
                     <Input
                         value={title}
@@ -79,6 +80,15 @@ const AdminTopBar = ({
                 </div>
 
                 <div className="flex items-center gap-2">
+                    {formId && (
+                        <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => window.location.href = `/forms/${formId}/submissions`}
+                        >
+                            Responses
+                        </Button>
+                    )}
                     <Button
                         variant="outline"
                         size="sm"
@@ -107,18 +117,20 @@ const AdminTopBar = ({
                                     className="fixed inset-0 z-40"
                                     onClick={() => setPopoverOpen(false)}
                                 />
-                                <div className="absolute right-0 top-full mt-2 z-50 w-80 rounded-xl border border-border bg-card shadow-lg shadow-black/5 overflow-hidden">
+                                <div className="absolute right-0 top-full mt-2 z-50 w-80 rounded-lg border border-border/50 bg-card shadow-xl shadow-neutral-400/30 overflow-hidden">
                                     <div className="flex items-center justify-between px-4 pt-4 pb-2">
                                         <span className="text-sm font-medium">
                                             Published
                                         </span>
-                                        <button
+                                        <Button
+                                            size="icon-sm"
                                             type="button"
+                                            variant="ghost"
                                             onClick={() => setPopoverOpen(false)}
-                                            className="flex items-center justify-center size-6 rounded-md text-muted-foreground hover:bg-muted transition-colors"
+                                            className="size-6"
                                         >
                                             <XIcon className="size-3.5" />
-                                        </button>
+                                        </Button>
                                     </div>
 
                                     <div className="px-4 pb-2">
@@ -136,7 +148,7 @@ const AdminTopBar = ({
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center gap-2 border-t border-border px-4 py-3">
+                                    <div className="flex items-center gap-2 border-t border-border/50 px-4 py-3">
                                         <Button
                                             size="sm"
                                             variant="outline"

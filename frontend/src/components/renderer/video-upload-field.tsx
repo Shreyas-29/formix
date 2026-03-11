@@ -2,7 +2,7 @@
 
 import Icons from "@/components/global/icons";
 import { Label } from "@/components/ui/label";
-import { MAX_VIDEO_BYTES, MAX_VIDEO_MB, STORAGE_BUCKET, supabase } from "@/lib/supabase";
+import { MAX_VIDEO_BYTES, MAX_VIDEO_MB, STORAGE_BUCKET, supabase } from "@/lib/supabase/supabase";
 import { cn } from "@/lib/utils";
 import type { FormField } from "@/types/form";
 import { CheckCircle2Icon, Loader2Icon, XIcon } from "lucide-react";
@@ -52,8 +52,8 @@ const VideoUploadField = ({ field, onChange, highlight }: Props) => {
     };
 
     const wrapper = cn(
-        "flex flex-col gap-1.5 rounded-xl p-4 transition-colors",
-        highlight ? "border border-orange-300 bg-orange-50" : "bg-transparent"
+        "flex flex-col gap-1.5 rounded-xl p-2 transition-colors",
+        highlight ? "" : "bg-transparent"
     );
 
     return (
@@ -114,10 +114,7 @@ const VideoUploadField = ({ field, onChange, highlight }: Props) => {
                     <CheckCircle2Icon className="size-5 text-green-600 shrink-0" />
                     <div className="flex flex-col flex-1 min-w-0">
                         <span className="text-sm font-medium text-green-700">
-                            Video uploaded successfully
-                        </span>
-                        <span className="text-xs text-green-600/80 truncate">
-                            {uploadedUrl}
+                            Video uploaded
                         </span>
                     </div>
                     <button
@@ -126,7 +123,7 @@ const VideoUploadField = ({ field, onChange, highlight }: Props) => {
                             setUploadedUrl("");
                             onChange(field.id, "");
                         }}
-                        className="shrink-0 text-muted-foreground hover:text-destructive transition-colors"
+                        className="shrink-0 text-muted-foreground hover:text-destructive transition-colors cursor-pointer"
                     >
                         <XIcon className="size-4" />
                     </button>

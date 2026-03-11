@@ -5,14 +5,16 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { FIELD_TYPE_LABELS, HAS_OPTIONS, HAS_MAX_LENGTH } from "@/constants/form-fields";
 import OptionsEditor from "@/components/admin/options-editor";
+import LogicRulesEditor from "@/components/admin/logic-rules-editor";
 import type { FormField } from "@/types/form";
 
 type Props = {
     field: FormField | null;
+    fields: FormField[];
     onUpdate: (updates: Partial<FormField>) => void;
 };
 
-const FieldSettingsPanel = ({ field, onUpdate }: Props) => {
+const FieldSettingsPanel = ({ field, fields, onUpdate }: Props) => {
     if (!field) {
         return (
             <div className="w-72 shrink-0 bg-card flex flex-col items-center justify-center p-6 text-center gap-2">
@@ -136,7 +138,7 @@ const FieldSettingsPanel = ({ field, onUpdate }: Props) => {
                         </div>
 
                         {!isDynamic && (
-                            <div className="flex flex-col gap-1.5">
+                            <div className="flex flex-col gap-1.5 pt-4">
                                 <Label>
                                     Options
                                 </Label>
@@ -149,17 +151,25 @@ const FieldSettingsPanel = ({ field, onUpdate }: Props) => {
                     </div>
                 )}
 
-                {field.type === "radio_group" && (
-                    <div className="flex flex-col gap-1.5">
-                        <Label>
-                            Options
-                        </Label>
-                        <OptionsEditor
-                            options={field.options ?? []}
-                            onChange={(options) => onUpdate({ options })}
-                        />
-                    </div>
-                )}
+                <div className="pt-2 space-y-5">
+                    {field.type === "radio_group" && (
+                        <div className="flex flex-col gap-1.5">
+                            <Label>
+                                Options
+                            </Label>
+                            <OptionsEditor
+                                options={field.options ?? []}
+                                onChange={(options) => onUpdate({ options })}
+                            />
+                        </div>
+                    )}
+
+                    <LogicRulesEditor
+                        field={field}
+                        fields={fields}
+                        onChange={(rules) => onUpdate({ rules })}
+                    />
+                </div>
             </div>
         </div>
     );

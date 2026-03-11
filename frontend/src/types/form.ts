@@ -11,7 +11,7 @@ export type FieldType =
     | "video_upload";
 
 export type LogicOperator = "==" | "!=" | ">=" | "<=" | ">" | "<";
-export type LogicEffect = "show" | "hide" | "highlight";
+export type LogicEffect = "show" | "hide" | "highlight" | "require";
 
 export type LogicRule = {
     fieldId: string;

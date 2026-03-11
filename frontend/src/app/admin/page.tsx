@@ -100,11 +100,14 @@ const AdminPage = () => {
 
         if (activeId.startsWith("panel::")) {
             const type = activeId.replace("panel::", "") as FieldType;
+            
             if (overId === "canvas-drop-zone") {
                 handleAddField(type);
             } else {
                 const overIndex = fields.findIndex((f) => f.id === overId);
-                handleAddField(type, overIndex >= 0 ? overIndex : undefined);
+                if (overIndex >= 0) {
+                    handleAddField(type, overIndex);
+                }
             }
             return;
         }
@@ -134,7 +137,7 @@ const AdminPage = () => {
             setSavedFormId(data.id);
             toast.success("Form published!");
         } catch {
-            toast.error("Could not save form. Is the backend running?");
+            toast.error("Could not save form. Please try again");
         } finally {
             setIsSaving(false);
         }
@@ -185,6 +188,7 @@ const AdminPage = () => {
                     {!isPreview && (
                         <FieldSettingsPanel
                             field={selectedField}
+                            fields={fields}
                             onUpdate={handleUpdateField}
                         />
                     )}

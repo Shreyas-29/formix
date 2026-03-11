@@ -2,9 +2,87 @@ import { Activity, Box, Calendar, FileText, Hash, LucideProps, MessageCircle, Sp
 
 const Icons = {
     logo: (props: LucideProps) => (
-        <svg {...props} width="243" height="219" viewBox="0 0 243 219" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M149.718 6.17182e-07C166.624 8.01123e-07 175.077 9.53674e-07 182.038 4.01924C189 8.03848 193.226 15.359 201.679 30L230.038 79.1192C238.491 93.7602 242.718 101.081 242.718 109.119C242.718 117.158 238.491 124.478 230.038 139.119L201.679 188.238C193.226 202.879 189 210.2 182.038 214.219C175.077 218.238 166.624 218.238 149.718 218.238H93C76.094 218.238 67.641 218.238 60.6795 214.219C53.718 210.2 49.4915 202.879 41.0385 188.238L12.6795 139.119C4.2265 124.478 -4.998e-08 117.158 0 109.119C4.99803e-08 101.081 4.2265 93.7602 12.6795 79.1192L41.0385 30C49.4915 15.359 53.718 8.03848 60.6795 4.01924C67.641 -4.76837e-07 76.094 -1.83863e-07 93 0L149.718 6.17182e-07Z" fill="#FF4E10" />
-            <path d="M119.205 53.3631C119.421 51.5456 122.058 51.5456 122.274 53.3631L124.083 68.61C126.419 88.298 141.942 103.82 161.63 106.156L176.877 107.966C178.694 108.181 178.694 110.819 176.877 111.034L161.63 112.844C141.942 115.18 126.419 130.702 124.083 150.39L122.274 165.637C122.058 167.454 119.421 167.454 119.205 165.637L117.396 150.39C115.06 130.702 99.5377 115.18 79.8498 112.844L64.6029 111.034C62.7854 110.819 62.7854 108.181 64.6029 107.966L79.8498 106.156C99.5377 103.82 115.06 88.298 117.396 68.61L119.205 53.3631Z" fill="white" />
+        // <svg {...props} width="243" height="219" viewBox="0 0 243 219" fill="none" xmlns="http://www.w3.org/2000/svg">
+        //     <path d="M149.718 6.17182e-07C166.624 8.01123e-07 175.077 9.53674e-07 182.038 4.01924C189 8.03848 193.226 15.359 201.679 30L230.038 79.1192C238.491 93.7602 242.718 101.081 242.718 109.119C242.718 117.158 238.491 124.478 230.038 139.119L201.679 188.238C193.226 202.879 189 210.2 182.038 214.219C175.077 218.238 166.624 218.238 149.718 218.238H93C76.094 218.238 67.641 218.238 60.6795 214.219C53.718 210.2 49.4915 202.879 41.0385 188.238L12.6795 139.119C4.2265 124.478 -4.998e-08 117.158 0 109.119C4.99803e-08 101.081 4.2265 93.7602 12.6795 79.1192L41.0385 30C49.4915 15.359 53.718 8.03848 60.6795 4.01924C67.641 -4.76837e-07 76.094 -1.83863e-07 93 0L149.718 6.17182e-07Z" fill="#FF4E10" />
+        //     <path d="M119.205 53.3631C119.421 51.5456 122.058 51.5456 122.274 53.3631L124.083 68.61C126.419 88.298 141.942 103.82 161.63 106.156L176.877 107.966C178.694 108.181 178.694 110.819 176.877 111.034L161.63 112.844C141.942 115.18 126.419 130.702 124.083 150.39L122.274 165.637C122.058 167.454 119.421 167.454 119.205 165.637L117.396 150.39C115.06 130.702 99.5377 115.18 79.8498 112.844L64.6029 111.034C62.7854 110.819 62.7854 108.181 64.6029 107.966L79.8498 106.156C99.5377 103.82 115.06 88.298 117.396 68.61L119.205 53.3631Z" fill="white" />
+        // </svg>
+        <svg {...props} width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g filter="url(#filter0_iiii_155_525)">
+                <path d="M0 250C0 137.132 0 80.6975 32.6936 43.7941C36.1668 39.8737 39.8737 36.1668 43.7941 32.6936C80.6975 0 137.132 0 250 0V0C362.868 0 419.302 0 456.206 32.6936C460.126 36.1668 463.833 39.8737 467.306 43.7941C500 80.6975 500 137.132 500 250V250C500 362.868 500 419.302 467.306 456.206C463.833 460.126 460.126 463.833 456.206 467.306C419.302 500 362.868 500 250 500V500C137.132 500 80.6975 500 43.7941 467.306C39.8737 463.833 36.1668 460.126 32.6936 456.206C0 419.302 0 362.868 0 250V250Z" fill="url(#paint0_radial_155_525)" />
+                <g filter="url(#filter1_d_155_525)">
+                    <rect x="92" y="120" width="160" height="60" rx="30" fill="white" />
+                </g>
+                <g filter="url(#filter2_d_155_525)">
+                    <rect x="92" y="220" width="315" height="60" rx="30" fill="white" />
+                </g>
+                <g filter="url(#filter3_d_155_525)">
+                    <rect x="92" y="320" width="220" height="60" rx="30" fill="white" />
+                </g>
+            </g>
+            <defs>
+                <filter id="filter0_iiii_155_525" x="0" y="-4" width="504" height="508" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                    <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                    <feOffset dx="4" dy="4" />
+                    <feGaussianBlur stdDeviation="5" />
+                    <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0" />
+                    <feBlend mode="normal" in2="shape" result="effect1_innerShadow_155_525" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                    <feOffset dy="4" />
+                    <feGaussianBlur stdDeviation="2" />
+                    <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.4 0" />
+                    <feBlend mode="normal" in2="effect1_innerShadow_155_525" result="effect2_innerShadow_155_525" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                    <feOffset dy="-4" />
+                    <feGaussianBlur stdDeviation="5" />
+                    <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0" />
+                    <feBlend mode="normal" in2="effect2_innerShadow_155_525" result="effect3_innerShadow_155_525" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                    <feOffset dx="4" />
+                    <feGaussianBlur stdDeviation="2" />
+                    <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.4 0" />
+                    <feBlend mode="normal" in2="effect3_innerShadow_155_525" result="effect4_innerShadow_155_525" />
+                </filter>
+                <filter id="filter1_d_155_525" x="86" y="116" width="172" height="72" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                    <feOffset dy="2" />
+                    <feGaussianBlur stdDeviation="3" />
+                    <feComposite in2="hardAlpha" operator="out" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0" />
+                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_155_525" />
+                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_155_525" result="shape" />
+                </filter>
+                <filter id="filter2_d_155_525" x="86" y="216" width="327" height="72" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                    <feOffset dy="2" />
+                    <feGaussianBlur stdDeviation="3" />
+                    <feComposite in2="hardAlpha" operator="out" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0" />
+                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_155_525" />
+                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_155_525" result="shape" />
+                </filter>
+                <filter id="filter3_d_155_525" x="86" y="316" width="232" height="72" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                    <feOffset dy="2" />
+                    <feGaussianBlur stdDeviation="3" />
+                    <feComposite in2="hardAlpha" operator="out" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0" />
+                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_155_525" />
+                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_155_525" result="shape" />
+                </filter>
+                <radialGradient id="paint0_radial_155_525" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(44.8111) scale(643.471)">
+                    <stop stopColor="#FF8C66" />
+                    <stop offset="0.770196" stopColor="#FF4E10" />
+                </radialGradient>
+            </defs>
         </svg>
     ),
     dashboard: (props: LucideProps) => (

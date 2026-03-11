@@ -16,9 +16,9 @@ export const generateMetadata = ({
     icons = [
         {
             rel: "icon",
-            type: "image/svg+xml",
+            type: "image/png",
             sizes: "32x32",
-            url: "/icons/logo.svg"
+            url: "/icons/icon.png"
         },
     ],
     noIndex = false,

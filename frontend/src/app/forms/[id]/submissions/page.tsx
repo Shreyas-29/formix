@@ -17,6 +17,12 @@ type Submission = {
     created_at: string;
 };
 
+type Branch = {
+    id: string;
+    name: string;
+    location: string;
+};
+
 type SubmissionsResponse = {
     form: { id: string; title: string; schema: { fields: FormField[] } };
     submissions: Submission[];
@@ -27,12 +33,22 @@ const SubmissionsPage = () => {
     const { id } = useParams<{ id: string }>();
 
     const [data, setData] = useState<SubmissionsResponse | null>(null);
+    const [branches, setBranches] = useState<Record<string, string>>({});
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        fetch(`${API_BASE}/forms/${id}/submissions`)
-            .then((r) => r.json())
-            .then(setData)
+        Promise.all([
+            fetch(`${API_BASE}/forms/${id}/submissions`).then((r) => r.json()),
+            fetch(`${API_BASE}/metadata/branches`).then((r) => r.json()).catch(() => []),
+        ])
+            .then(([resData, branchesData]) => {
+                setData(resData);
+                const bMap: Record<string, string> = {};
+                branchesData.forEach((b: Branch) => {
+                    bMap[b.id] = `${b.name} — ${b.location}`;
+                });
+                setBranches(bMap);
+            })
             .catch(() => toast.error("Could not load submissions"))
             .finally(() => setLoading(false));
     }, [id]);
@@ -72,8 +88,8 @@ const SubmissionsPage = () => {
     const fields = form.schema.fields;
 
     return (
-        <main className="min-h-screen bg-background">
-            <div className="max-w-5xl mx-auto px-4 py-10 flex flex-col gap-6">
+        <main className="min-h-dvh bg-background">
+            <div className="max-w-7xl mx-auto px-4 py-10 flex flex-col gap-6">
                 <div className="flex items-center gap-3">
                     <Link href="/forms">
                         <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground">
@@ -121,7 +137,7 @@ const SubmissionsPage = () => {
                                         {fields.map((f) => (
                                             <th
                                                 key={f.id}
-                                                className="px-4 py-3 text-left text-xs font-medium text-muted-foreground whitespace-nowrap"
+                                                className="px-4 py-3 text-left text-xs font-medium text-muted-foreground whitespace-normal leading-normal max-w-[200px]"
                                             >
                                                 {f.label}
                                             </th>
@@ -141,7 +157,7 @@ const SubmissionsPage = () => {
                                                 {formatDate(sub.created_at)}
                                             </td>
                                             {fields.map((f) => (
-                                                <td key={f.id} className="px-4 py-3 text-sm max-w-48">
+                                                <td key={f.id} className="px-4 py-3 text-sm max-w-sm align-top wrap-break-word whitespace-normal leading-relaxed">
                                                     {sub.data[f.id] && sub.data[f.id].startsWith("http") ? (
                                                         <a
                                                             href={sub.data[f.id]}
@@ -149,11 +165,11 @@ const SubmissionsPage = () => {
                                                             rel="noopener noreferrer"
                                                             className="text-primary underline underline-offset-2 text-xs"
                                                         >
-                                                            View file ↗
+                                                            View file
                                                         </a>
                                                     ) : (
-                                                        <span className="truncate block">
-                                                            {formatValue(sub.data[f.id])}
+                                                        <span className="wrap-break-word">
+                                                            {formatValue(f.dataSource === "branches" ? (branches[sub.data[f.id]] || sub.data[f.id]) : sub.data[f.id])}
                                                         </span>
                                                     )}
                                                 </td>

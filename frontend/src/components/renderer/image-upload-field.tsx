@@ -2,7 +2,7 @@
 
 import Icons from "@/components/global/icons";
 import { Label } from "@/components/ui/label";
-import { STORAGE_BUCKET, supabase } from "@/lib/supabase";
+import { STORAGE_BUCKET, supabase } from "@/lib/supabase/supabase";
 import { cn } from "@/lib/utils";
 import type { FormField } from "@/types/form";
 import { CheckCircle2Icon, Loader2Icon, XIcon } from "lucide-react";
@@ -58,8 +58,8 @@ const ImageUploadField = ({ field, onChange, highlight }: Props) => {
     };
 
     const wrapper = cn(
-        "flex flex-col gap-1.5 rounded-xl p-4 transition-colors",
-        highlight ? "border border-orange-300 bg-orange-50" : "bg-transparent"
+        "flex flex-col gap-1.5 rounded-xl p-2 transition-colors",
+        highlight ? "" : "bg-transparent"
     );
 
     return (
@@ -129,7 +129,7 @@ const ImageUploadField = ({ field, onChange, highlight }: Props) => {
                     <img
                         src={uploadedUrl}
                         alt="Uploaded"
-                        className="w-full max-h-48 object-cover"
+                        className="w-full max-h-48 object-contain"
                     />
                     <button
                         type="button"
@@ -138,14 +138,14 @@ const ImageUploadField = ({ field, onChange, highlight }: Props) => {
                             setPreview("");
                             onChange(field.id, "");
                         }}
-                        className="absolute top-2 right-2 flex items-center justify-center size-7 rounded-full bg-background/80 backdrop-blur-sm border border-border text-muted-foreground hover:text-destructive transition-colors"
+                        className="absolute top-2 right-2 flex items-center justify-center size-7 rounded-full bg-background/80 backdrop-blur-sm border border-border text-muted-foreground hover:text-destructive transition-colors cursor-pointer"
                     >
                         <XIcon className="size-3.5" />
                     </button>
                     <div className="flex items-center gap-2 px-3 py-2 bg-green-50 border-t border-green-200">
                         <CheckCircle2Icon className="size-4 text-green-600 shrink-0" />
                         <span className="text-xs font-medium text-green-700">
-                            Image uploaded successfully
+                            Image uploaded
                         </span>
                     </div>
                 </div>

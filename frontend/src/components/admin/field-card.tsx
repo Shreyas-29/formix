@@ -36,8 +36,8 @@ const FieldCard = ({ field, isSelected, onSelect, onRemove, onDuplicate, dragLis
         </button>
 
         <div className="flex flex-col flex-1 gap-0.5 min-w-0">
-            <div className="flex items-center gap-1.5">
-                <span className="text-sm font-medium truncate">
+            <div className="flex items-start gap-1.5 w-full">
+                <span className="text-sm font-medium wrap-break-word whitespace-normal leading-tight">
                     {field.label}
                 </span>
                 {field.required && (

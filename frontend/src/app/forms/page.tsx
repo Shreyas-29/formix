@@ -3,7 +3,13 @@
 import Icons from "@/components/global/icons";
 import { Button } from "@/components/ui/button";
 import type { FormDefinition } from "@/types/form";
-import { Loader2Icon } from "lucide-react";
+import { Loader2Icon, MoreVerticalIcon, CheckIcon, CopyIcon, ListIcon, ExternalLinkIcon, TrashIcon } from "lucide-react";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -15,6 +21,7 @@ const FormsPage = () => {
     const [forms, setForms] = useState<FormDefinition[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [copiedId, setCopiedId] = useState<string | null>(null);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
 
     useEffect(() => {
         fetch(`${API_BASE}/forms/definitions`)
@@ -29,6 +36,24 @@ const FormsPage = () => {
         navigator.clipboard.writeText(link);
         setCopiedId(formId);
         setTimeout(() => setCopiedId(null), 2000);
+    };
+
+    const handleDelete = async (formId: string) => {
+        if (!confirm("Are you sure you want to delete this form entirely? All submissions will be permanently lost.")) return;
+
+        setDeletingId(formId);
+        try {
+            const res = await fetch(`${API_BASE}/forms/${formId}`, {
+                method: "DELETE"
+            });
+            if (!res.ok) throw new Error("Failed to delete form");
+            setForms(prev => prev.filter(f => f.id !== formId));
+            toast.success("Form deleted successfully");
+        } catch (e) {
+            toast.error("Could not delete form");
+        } finally {
+            setDeletingId(null);
+        }
     };
 
     const formatDate = (iso: string) => {
@@ -106,25 +131,36 @@ const FormsPage = () => {
                                     </div>
                                 </div>
 
-                                <div className="flex items-center gap-1.5 shrink-0">
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        onClick={() => handleCopy(form.id)}
-                                        className="h-7 text-xs px-2.5"
-                                    >
-                                        {copiedId === form.id ? "Copied!" : "Copy link"}
-                                    </Button>
-                                    <Link href={`/forms/${form.id}/submissions`}>
-                                        <Button size="sm" variant="outline" className="h-7 text-xs px-2.5">
-                                            Responses
-                                        </Button>
-                                    </Link>
-                                    <Link href={`/forms/${form.id}`}>
-                                        <Button size="sm" className="h-7 text-xs px-2.5">
-                                            Fill Form
-                                        </Button>
-                                    </Link>
+                                <div className="flex items-center shrink-0">
+                                    {deletingId === form.id ? (
+                                        <div className="flex items-center justify-center p-2">
+                                            <Loader2Icon className="size-4 animate-spin text-muted-foreground" />
+                                        </div>
+                                    ) : (
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger className="flex items-center justify-center size-8 rounded-md hover:bg-muted text-muted-foreground transition-colors outline-none focus-visible:ring-1 focus-visible:ring-primary cursor-pointer">
+                                                <MoreVerticalIcon className="size-4" />
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end" className="w-44">
+                                                <DropdownMenuItem onClick={() => handleCopy(form.id)} className="gap-2 cursor-pointer">
+                                                    {copiedId === form.id ? "Copied!" : "Copy link"}
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem className="gap-2 cursor-pointer p-0">
+                                                    <Link href={`/forms/${form.id}/submissions`} className="flex w-full items-center gap-2 px-2 py-1.5">
+                                                        View Responses
+                                                    </Link>
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem className="gap-2 cursor-pointer p-0">
+                                                    <Link href={`/forms/${form.id}`} className="flex w-full items-center gap-2 px-2 py-1.5">
+                                                        Fill Form
+                                                    </Link>
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem onClick={() => handleDelete(form.id)} className="gap-2 cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10 hover:text-destructive! mt-1 mb-0.5">
+                                                    Delete Form
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    )}
                                 </div>
                             </div>
                         ))}
