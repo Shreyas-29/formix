@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { InfoIcon, XIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
     DndContext,
     DragOverlay,
@@ -33,6 +35,18 @@ const AdminPage = () => {
     const [savedFormId, setSavedFormId] = useState<string | null>(null);
     const [isPreview, setIsPreview] = useState<boolean>(false);
     const [activeDragType, setActiveDragType] = useState<string | null>(null);
+    const [showBanner, setShowBanner] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (!localStorage.getItem("formix_coldstart_banner")) {
+            setShowBanner(true);
+        }
+    }, []);
+
+    const dismissBanner = () => {
+        localStorage.setItem("formix_coldstart_banner", "true");
+        setShowBanner(false);
+    };
 
     const selectedField = fields.find((f) => f.id === selectedFieldId) ?? null;
 
@@ -153,12 +167,31 @@ const AdminPage = () => {
 
     return (
         <DndContext
+            id="form-builder-dnd-context"
             sensors={sensors}
             collisionDetection={closestCenter}
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
         >
             <div className="flex flex-col h-dvh bg-background overflow-hidden">
+                {showBanner && (
+                    <div className="flex items-center justify-between gap-3 bg-blue-500/10 border-b border-blue-500/20 text-blue-600 dark:bg-blue-500/5 dark:text-blue-400 px-4 py-2 text-sm shrink-0">
+                        <div className="flex items-center gap-2">
+                            <InfoIcon className="size-4 shrink-0" />
+                            <p className="leading-relaxed">
+                                <strong>Note:</strong> The backend is hosted on a free Render instance. Initial requests may take 50 seconds to boot up.
+                            </p>
+                        </div>
+                        <Button 
+                            variant="ghost" 
+                            size="icon-sm" 
+                            className="size-6 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 hover:text-blue-700 dark:hover:text-blue-300" 
+                            onClick={dismissBanner}
+                        >
+                            <XIcon className="size-3.5" />
+                        </Button>
+                    </div>
+                )}
                 <AdminTopBar
                     title={title}
                     description={description}

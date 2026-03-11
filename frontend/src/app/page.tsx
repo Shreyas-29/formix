@@ -1,16 +1,14 @@
-import Link from "next/link"
-import { ClipboardListIcon, ClipboardIcon, ArrowRightIcon } from "lucide-react"
-import Icons from "@/components/global/icons"
+import Icons from "@/components/global/icons";
+import { ArrowRightIcon } from "lucide-react";
+import Link from "next/link";
 
 const HomePage = async () => {
     return (
-        <main className="flex flex-col min-h-screen items-center justify-center bg-background px-4">
+        <main className="flex flex-col h-dvh items-center justify-center bg-background px-4">
             <div className="flex flex-col items-center gap-10 w-full max-w-lg">
                 <div className="flex flex-col items-center gap-2 text-center">
-                    <div className="flex items-center justify-center size-14 rounded-2xl bg-primary/10 mb-2">
-                        <Icons.form className="size-7 text-primary" />
-                    </div>
-                    <h1 className="text-3xl font-semibold tracking-tight">
+                    <Icons.logo className="size-10 text-primary" />
+                    <h1 className="text-3xl font-semibold tracking-tight mt-2">
                         Formix
                     </h1>
                     <p className="text-sm text-muted-foreground max-w-xs">

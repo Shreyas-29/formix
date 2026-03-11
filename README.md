@@ -1,60 +1,76 @@
-# Formix
+# Formix - Simple Form Builder
 
-A modern, dynamic form builder and collection engine. Formix empowers organizations to rapidly deploy custom forms, manage advanced field constraints, and seamlessly capture respondent data through an intuitive admin and user interface.
+Formix is an easy-to-use platform for teams to quickly make custom forms, set up smart conditional rules, and collect files like photos and videos in one place.
 
-## Features
+<img width="1280" alt="Formix Dashboard" src="https://github.com/user-attachments/assets/4123ad93-0573-4c09-934c-5a3702109c81" />
 
-- Dynamic Form Creation: Build complex, custom forms with an interactive drag-and-drop canvas.
-- Advanced Logic Engine: Conditionally hide, show, or require fields based on respondent input. Attach automated visual highlight alerts to fields based on dynamic rules.
-- Live Data Integration: Inject remote database entries into form selectors (e.g., dynamically loading live Job Sites/Branches directly from the backend).
-- Rich Media Support: Direct secure uploads for image and video files using authenticated buckets.
-- Administrative Dashboard: Manage your form lifecycle, duplicate sharing links instantly, review submissions in a rich table view with native data formatting, and permanently delete unneeded forms.
-- Completely Responsive: Modern design patterns optimized for desktop, tablet, and mobile accessibility without layout breakage.
+## ✨ Core Features
 
-## Tech Stack
+- **Form Builder**: A simple drag-and-drop tool to make custom forms.
+- **Conditional Logic**: Set up "if/then" rules to show or hide questions based on what the user selects.
+- **Dynamic Dropdowns**: Automatically load live options from the database (like locations or job sites) directly into dropdown menus.
+- **Media Uploads**: Easily collect and save pictures and videos directly from the form.
+- **Submissions Hub**: View all form answers in a clean table format.
+- **Mobile Friendly**: Works perfectly on phones, tablets, and desktop computers.
 
-Frontend:
-- Framework: Next.js (React)
-- Languages: TypeScript
-- Styling: Tailwind CSS
-- UI Foundations: Radix UI
-- Drag & Drop: @dnd-kit
-- Feedback & Icons: Sonner, Lucide React
+## 🛠️ Tech Stack
 
-Backend:
-- Framework: FastAPI (Python)
-- Database: Supabase (PostgreSQL)
-- Validation: Pydantic
+### Frontend
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS with Base UI / Radix primitives
+- **Drag & Drop**: `@dnd-kit` for premium, collision-aware interactive reordering
+- **Storage**: Supabase Storage (Buckets)
+- **Icons**: Lucide React
 
-## Deployment Information
+### Backend
+- **Framework**: FastAPI (Python)
+- **Database**: PostgreSQL (Supabase)
+- **Tools**: Pydantic
 
-The application architecture is designed for modern cloud hosting. The frontend is optimized for edge networks (e.g., Vercel or Render static deployments), while the backend is deployed as a Web Service on Render.
+## 🚀 Getting Started
 
-Notice regarding Cold Starts:
-Because the backend API is hosted on Render's free tier, the server actively spins down to conserve resources after 15 minutes of inactivity. When accessing the application for the first time after a period of rest, please expect a cold start delay of approximately 50 to 60 seconds while the backend orchestrations boot up. Once active, all subsequent requests will resolve instantly. 
+### 1. Prerequisites
+- Node.js (Late v18 or newer)
+- Python 3.10+
+- Supabase Project & URL
 
-## Local Setup Instructions
+### 2. Installation
 
-### Prerequisites
-- Node.js installed
-- Python 3.10+ installed
-- Supabase account and project
+#### Frontend
+```bash
+cd frontend
+pnpm install
+pnpm run dev
+```
 
-### Backend Setup
-1. Navigate to the `backend` directory.
-2. Install dependencies: `pip install -r requirements.txt`
-3. Duplicate `.env.example` to `.env` and fill in your Supabase credentials:
-   - `SUPABASE_URL`
-   - `SUPABASE_SERVICE_KEY`
-4. Start the FastAPI development server: `uvicorn src.main:app --reload`
-   The backend will start on port 8000.
+#### Backend
+```bash
+cd backend
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+uvicorn src.main:app --reload
+```
 
-### Frontend Setup
-1. Navigate to the `frontend` directory.
-2. Install dependencies: `pnpm install`
-3. Duplicate `.env.example` to `.env` (or create one) and configure your environment:
-   - `NEXT_PUBLIC_API_URL=http://localhost:8000`
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` (Ensure you use your Anon JWT token if required for direct storage uploads).
-4. Run the development environment: `pnpm dev`
-   The frontend will start on port 3000.
+### 3. Environment Variables
+
+**Frontend (`frontend/.env`):**
+```env
+NEXT_PUBLIC_APP_NAME="Formix"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+NEXT_PUBLIC_API_URL="http://localhost:8000"
+NEXT_PUBLIC_SUPABASE_URL=your_url
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=your_key
+```
+
+**Backend (`backend/.env`):**
+```env
+SUPABASE_URL=your_url
+SUPABASE_SERVICE_KEY=your_service_key
+```
+
+### 4. Run the app
+Open http://localhost:3000 in your browser for the frontend and http://localhost:8000 for the backend.
+
+**Note on Backend Cold Starts (Render.com free tier):** The backend is hosted on Render's free tier, so the server goes to sleep after 15 minutes of inactivity. When you try to access the app again after it sleeps, the first request will take about 50 seconds to boot up. After that, it runs fast as usual.
