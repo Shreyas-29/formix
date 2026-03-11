@@ -1,15 +1,12 @@
-# Formix - Simple Form Builder
+# Formix - Form Builder
 
 Formix is an easy-to-use platform for teams to quickly make custom forms, set up smart conditional rules, and collect files like photos and videos in one place.
-
-<img width="1280" alt="Formix Dashboard" src="https://github.com/user-attachments/assets/4123ad93-0573-4c09-934c-5a3702109c81" />
 
 ## 🎥 Demo Video
 
 Here is a quick walkthrough of how Formix works, creating a custom form with logic and submitting it:
 
-<!-- Just drag and drop your screen recording file here in the GitHub editor to upload it directly -->
-<video controls src="" width="100%"></video>
+<video controls src="https://github.com/user-attachments/assets/2e2d714f-90cc-4c07-85c3-1f8c4cca66c3" width="100%"></video>
 
 
 ## ✨ Core Features
