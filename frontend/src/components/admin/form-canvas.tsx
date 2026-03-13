@@ -61,7 +61,7 @@ const FormCanvas = ({
     };
 
     return (
-        <div className="flex-1 overflow-y-auto bg-muted/30 p-8">
+        <div className="flex-1 overflow-y-auto bg-muted/30 p-4 sm:p-8">
             <div className="max-w-2xl mx-auto flex flex-col gap-3">
                 <div className="overflow-hidden rounded-xl border border-border/60 bg-card">
                     <div className="h-1 w-full bg-primary" />

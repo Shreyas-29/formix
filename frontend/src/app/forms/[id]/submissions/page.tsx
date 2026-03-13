@@ -85,7 +85,7 @@ const SubmissionsPage = () => {
     }
 
     const { form, submissions } = data;
-    const fields = form.schema.fields;
+    const fields = form?.schema?.fields;
 
     return (
         <main className="min-h-dvh bg-background">
@@ -101,14 +101,14 @@ const SubmissionsPage = () => {
 
                 <div className="flex flex-col gap-0.5">
                     <h1 className="text-xl font-semibold tracking-tight">
-                        {form.title}
+                        {form?.title}
                     </h1>
                     <p className="text-sm text-muted-foreground">
-                        {submissions.length} response{submissions.length !== 1 ? "s" : ""}
+                        {submissions?.length} response{submissions?.length !== 1 ? "s" : ""}
                     </p>
                 </div>
 
-                {submissions.length === 0 ? (
+                {submissions?.length === 0 ? (
                     <div className="flex flex-col items-center gap-2 py-24 text-center">
                         <p className="text-sm font-medium text-muted-foreground">
                             No responses yet
@@ -145,33 +145,48 @@ const SubmissionsPage = () => {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-border">
-                                    {submissions.map((sub, i) => (
+                                    {submissions?.map((sub, i) => (
                                         <tr
                                             key={sub.id}
                                             className="hover:bg-muted/20 transition-colors"
                                         >
                                             <td className="px-4 py-3 text-xs text-muted-foreground">
-                                                {submissions.length - i}
+                                                {submissions?.length - i}
                                             </td>
                                             <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">
                                                 {formatDate(sub.created_at)}
                                             </td>
                                             {fields.map((f) => (
                                                 <td key={f.id} className="px-4 py-3 text-sm md:min-w-[200px] max-w-[400px] align-middle wrap-break-word whitespace-normal leading-relaxed">
-                                                    {sub.data[f.id] && sub.data[f.id].startsWith("http") ? (
-                                                        <a
-                                                            href={sub.data[f.id]}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="text-primary underline underline-offset-2 text-xs"
-                                                        >
-                                                            View file
-                                                        </a>
-                                                    ) : (
-                                                        <span className="wrap-break-word">
-                                                            {formatValue(f.dataSource === "branches" ? (branches[sub.data[f.id]] || sub.data[f.id]) : sub.data[f.id])}
-                                                        </span>
-                                                    )}
+                                                    {(() => {
+                                                        const rawValue = sub.data[f.id];
+                                                        const isBranchField = f.dataSource === "branches";
+                                                        
+                                                        const valueToDisplay = (isBranchField && !rawValue) ? (sub.branch_id || "") : (rawValue || "");
+                                                        
+                                                        if (valueToDisplay.startsWith("http")) {
+                                                            return (
+                                                                <a
+                                                                    href={valueToDisplay}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="text-primary underline underline-offset-2 text-xs"
+                                                                >
+                                                                    View file
+                                                                </a>
+                                                            );
+                                                        }
+
+                                                        const formatted = isBranchField 
+                                                            ? (branches[valueToDisplay] || valueToDisplay)
+                                                            : valueToDisplay;
+
+                                                        return (
+                                                            <span className="wrap-break-word">
+                                                                {formatValue(formatted)}
+                                                            </span>
+                                                        );
+                                                    })()}
                                                 </td>
                                             ))}
                                         </tr>

@@ -7,6 +7,8 @@ import {
     CheckIcon,
     ExternalLinkIcon,
     XIcon,
+    MenuIcon,
+    SettingsIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -26,6 +28,8 @@ type Props = {
     formId: string | null;
     isPreview: boolean;
     onTogglePreview: () => void;
+    onToggleLeftPanel?: () => void;
+    onToggleRightPanel?: () => void;
     isEditing?: boolean;
 };
 
@@ -39,6 +43,8 @@ const AdminTopBar = ({
     formId,
     isPreview,
     onTogglePreview,
+    onToggleLeftPanel,
+    onToggleRightPanel,
     isEditing = false,
 }: Props) => {
 
@@ -68,20 +74,42 @@ const AdminTopBar = ({
                 <div className="flex items-center gap-3">
                     <Link href="/forms" className="flex items-center gap-1.5 hover:opacity-80 transition-opacity">
                         <Icons.logo className="size-6" />
-                        <span className="text-sm font-semibold tracking-tight">
+                        <span className="text-sm font-semibold tracking-tight hidden lg:flex">
                             Formix
                         </span>
                     </Link>
-                    <div className="w-px h-5 bg-border" />
+                    <div className="w-px h-5 bg-border hidden lg:block" />
                     <Input
                         value={title}
                         onChange={(e) => onTitleChange(e.target.value)}
                         placeholder="Untitled Form"
-                        className="h-8 w-56 border-transparent bg-transparent text-sm font-medium shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-transparent"
+                        className="h-8 w-32 sm:w-56 border-transparent bg-transparent text-sm font-medium shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-transparent hidden lg:flex"
                     />
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                    {!isPreview && (
+                        <>
+                            <Button
+                                variant="ghost"
+                                size="icon-sm"
+                                onClick={onToggleLeftPanel}
+                                title="Add fields"
+                                className="lg:hidden"
+                            >
+                                <MenuIcon className="size-4" />
+                            </Button>
+                            <Button
+                                variant="ghost"
+                                size="icon-sm"
+                                onClick={onToggleRightPanel}
+                                title="Field settings"
+                                className="lg:hidden"
+                            >
+                                <SettingsIcon className="size-4" />
+                            </Button>
+                        </>
+                    )}
                     {formId && (
                         <Button
                             size="sm"

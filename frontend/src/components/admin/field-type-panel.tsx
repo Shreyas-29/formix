@@ -48,7 +48,7 @@ const DraggableFieldButton = ({ type, icon, label, onAddField }: DraggableFieldB
 };
 
 const FieldTypePanel = ({ onAddField }: Props) => (
-    <div className="w-64 shrink-0 bg-card border-r border-border/40 overflow-y-auto flex flex-col gap-5 p-4">
+    <div className="w-full lg:w-64 shrink-0 bg-card border-r border-border/40 overflow-y-auto flex flex-col gap-5 p-4 h-full">
         {FIELD_CATEGORIES.map((category) => (
             <div key={category.label} className="flex flex-col gap-1">
                 <span className="px-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">

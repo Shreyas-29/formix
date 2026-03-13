@@ -5,6 +5,7 @@ import FieldSettingsPanel from "@/components/admin/field-settings-panel";
 import FieldTypePanel from "@/components/admin/field-type-panel";
 import FormCanvas from "@/components/admin/form-canvas";
 import Icons from "@/components/global/icons";
+import MobilePanels from "@/components/admin/mobile-panels";
 import { Button } from "@/components/ui/button";
 import { FIELD_CATEGORIES, FIELD_TYPE_LABELS } from "@/constants/form-fields";
 import type { FieldType, FormDefinition, FormField } from "@/types/form";
@@ -41,6 +42,8 @@ const EditFormPage = () => {
     const [isPreview, setIsPreview] = useState<boolean>(false);
     const [activeDragType, setActiveDragType] = useState<string | null>(null);
     const [showBanner, setShowBanner] = useState<boolean>(false);
+    const [leftPanelOpen, setLeftPanelOpen] = useState<boolean>(false);
+    const [rightPanelOpen, setRightOpen] = useState<boolean>(false);
 
     useEffect(() => {
         const loadForm = async () => {
@@ -210,8 +213,8 @@ const EditFormPage = () => {
                     <div className="flex items-center justify-between gap-3 bg-blue-500/10 border-b border-blue-500/20 text-blue-600 dark:bg-blue-500/5 dark:text-blue-400 px-4 py-2 text-sm shrink-0">
                         <div className="flex items-center gap-2">
                             <InfoIcon className="size-4 shrink-0" />
-                            <p className="leading-relaxed">
-                                <strong>Note:</strong> The backend is hosted on a free Render instance. Initial requests may take 50 seconds to boot up.
+                            <p className="leading-relaxed text-xs sm:text-sm">
+                                <strong>Note:</strong> The backend is hosted on Render. Initial requests may take 50s to boot.
                             </p>
                         </div>
                         <Button
@@ -235,10 +238,16 @@ const EditFormPage = () => {
                     formId={formId}
                     isPreview={isPreview}
                     onTogglePreview={() => setIsPreview((p) => !p)}
+                    onToggleLeftPanel={() => setLeftPanelOpen(true)}
+                    onToggleRightPanel={() => setRightOpen(true)}
                     isEditing={true}
                 />
-                <div className="flex flex-1 overflow-hidden">
-                    {!isPreview && <FieldTypePanel onAddField={handleAddField} />}
+                <div className="flex flex-1 overflow-hidden relative">
+                    {!isPreview && (
+                        <div className="hidden lg:block h-full">
+                            <FieldTypePanel onAddField={handleAddField} />
+                        </div>
+                    )}
                     <FormCanvas
                         title={title}
                         description={description}
@@ -252,13 +261,26 @@ const EditFormPage = () => {
                         isPreview={isPreview}
                     />
                     {!isPreview && (
-                        <FieldSettingsPanel
-                            field={selectedField}
-                            fields={fields}
-                            onUpdate={handleUpdateField}
-                        />
+                        <div className="hidden lg:block h-full">
+                            <FieldSettingsPanel
+                                field={selectedField}
+                                fields={fields}
+                                onUpdate={handleUpdateField}
+                            />
+                        </div>
                     )}
                 </div>
+
+                <MobilePanels
+                    leftOpen={leftPanelOpen}
+                    setLeftOpen={setLeftPanelOpen}
+                    rightOpen={rightPanelOpen}
+                    setRightOpen={setRightOpen}
+                    onAddField={handleAddField}
+                    selectedField={selectedField}
+                    fields={fields}
+                    onUpdateField={handleUpdateField}
+                />
             </div>
 
             <DragOverlay>

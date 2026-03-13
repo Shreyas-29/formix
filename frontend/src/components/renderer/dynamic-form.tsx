@@ -8,43 +8,12 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 type FormState = Record<string, string>;
 
-const evaluateRule = (rule: LogicRule, formState: FormState): boolean => {
-    const sourceVal = formState[rule.fieldId];
-    switch (rule.operator) {
-        case "==": return String(sourceVal) === String(rule.value);
-        case "!=": return String(sourceVal) !== String(rule.value);
-        case ">=": return Number(sourceVal) >= Number(rule.value);
-        case "<=": return Number(sourceVal) <= Number(rule.value);
-        case ">": return Number(sourceVal) > Number(rule.value);
-        case "<": return Number(sourceVal) < Number(rule.value);
-        default: return false;
-    }
-};
-
-const isFieldVisible = (field: FormField, formState: FormState): boolean => {
-    if (!field.rules) return true;
-
-    const hideRule = field.rules.find((r) => r.effect === "hide" && r.targetFieldId === field.id);
-    const showRule = field.rules.find((r) => r.effect === "show" && r.targetFieldId === field.id);
-
-    if (hideRule && evaluateRule(hideRule, formState)) return false;
-    if (showRule) return evaluateRule(showRule, formState);
-
-    return true;
-};
+import { evaluateRule, isFieldVisible, isFieldRequired } from "@/utils/form-logic";
 
 const shouldHighlight = (field: FormField, formState: FormState): boolean => {
     if (!field.rules) return false;
     return field.rules.some(
         (r) => r.effect === "highlight" && evaluateRule(r, formState)
-    );
-};
-
-const isFieldRequired = (field: FormField, formState: FormState): boolean => {
-    if (field.required) return true;
-    if (!field.rules) return false;
-    return field.rules.some(
-        (r) => r.effect === "require" && evaluateRule(r, formState)
     );
 };
 

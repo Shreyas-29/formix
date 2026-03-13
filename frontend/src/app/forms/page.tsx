@@ -99,7 +99,7 @@ const FormsPage = () => {
                             <h1 className="text-lg font-semibold tracking-tight">
                                 Published Forms
                             </h1>
-                            <p className="text-xs text-muted-foreground">
+                            <p className="text-xs text-muted-foreground hidden lg:block">
                                 Share a link with your team to collect data
                             </p>
                         </div>

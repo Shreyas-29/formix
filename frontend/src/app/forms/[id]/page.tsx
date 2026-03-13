@@ -7,6 +7,7 @@ import { CheckCircle2Icon, Loader2Icon } from "lucide-react";
 import DynamicForm from "@/components/renderer/dynamic-form";
 import { Button } from "@/components/ui/button";
 import type { FormDefinition } from "@/types/form";
+import { isFieldVisible, isFieldRequired } from "@/utils/form-logic";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -41,6 +42,35 @@ const FormPage = () => {
 
     const handleSubmit = async () => {
         if (!form) return;
+
+        // 1. Validate required fields (including visible based on rules)
+        const missingFields: string[] = [];
+        let hasAnyData = false;
+
+        form.schema.fields.forEach((field) => {
+            const visible = isFieldVisible(field, formState);
+            if (!visible) return;
+
+            const val = (formState[field.id] || "").trim();
+            if (val) hasAnyData = true;
+
+            const required = isFieldRequired(field, formState);
+            if (required && !val) {
+                missingFields.push(field.label);
+            }
+        });
+
+        if (missingFields.length > 0) {
+            toast.error(`Please fill required fields: ${missingFields.join(", ")}`);
+            return;
+        }
+
+        // 2. Prevent completely empty form submission
+        if (!hasAnyData) {
+            toast.error("Cannot submit an empty form. Please fill at least one field.");
+            return;
+        }
+
         const branchField = form.schema.fields.find((f) => f.dataSource === "branches");
         const branchId = branchField ? formState[branchField.id] : undefined;
 

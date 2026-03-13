@@ -144,12 +144,16 @@ def is_field_required(field: FieldSchema, form_data: dict[str, Any]) -> bool:
     return any(r.effect == "require" and evaluate_rule(r, form_data) for r in field.rules)
 
 def validate_submission_data(schema: FormSchema, data: dict[str, Any]) -> None:
+    has_any_data = False
     for field in schema.fields:
         if not is_field_visible(field, data):
             continue
 
         value = data.get(field.id)
         raw = str(value).strip() if value is not None else ""
+
+        if raw:
+            has_any_data = True
 
         if is_field_required(field, data) and not raw:
             raise HTTPException(
@@ -186,6 +190,12 @@ def validate_submission_data(schema: FormSchema, data: dict[str, Any]) -> None:
                 status_code=422,
                 detail=f"'{field.label}' exceeds max length of {field.maxLength}",
             )
+
+    if not has_any_data:
+        raise HTTPException(
+            status_code=422,
+            detail="Form is empty. Please fill at least one field."
+        )
 
 # ─── Routes ───────────────────────────────────────────────────────────────────
 

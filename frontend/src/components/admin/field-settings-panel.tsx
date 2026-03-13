@@ -17,7 +17,7 @@ type Props = {
 const FieldSettingsPanel = ({ field, fields, onUpdate }: Props) => {
     if (!field) {
         return (
-            <div className="w-72 shrink-0 bg-card flex flex-col items-center justify-center p-6 text-center gap-2">
+            <div className="w-full lg:w-72 shrink-0 bg-card flex flex-col items-center justify-center p-6 text-center gap-2">
                 <p className="text-sm font-medium text-muted-foreground">
                     No field selected
                 </p>
@@ -33,7 +33,7 @@ const FieldSettingsPanel = ({ field, fields, onUpdate }: Props) => {
     const hasMaxLength = HAS_MAX_LENGTH.includes(field.type);
 
     return (
-        <div className="w-72 shrink-0 bg-card overflow-y-auto flex flex-col">
+        <div className="w-full lg:w-72 shrink-0 bg-card overflow-y-auto flex flex-col h-full">
             <div className="flex items-center justify-between p-4 border-b border-border/40">
                 <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
                     Field Settings
@@ -43,7 +43,7 @@ const FieldSettingsPanel = ({ field, fields, onUpdate }: Props) => {
                 </span>
             </div>
 
-            <div className="flex flex-col gap-5 p-4">
+            <div className="flex flex-col gap-5 p-4 h-full">
                 <div className="flex flex-col gap-1.5">
                     <Label htmlFor="settings-label">
                         Label
